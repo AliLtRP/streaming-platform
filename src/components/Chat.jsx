@@ -37,7 +37,7 @@ const Chat = () => {
   return (
     <>
       <div
-        className={`hidden flex-col fixed lg:flex lg:relative right-0 top-0 min-w-[350px] w-[20vw] h-screen bg-gray-200 ${
+        className={`hidden flex-col fixed lg:flex lg:relative right-0 top-0 min-w-[350px] w-[20vw] h-svh bg-gray-200 ${
           showChat && "!flex"
         }`}
       >
@@ -54,6 +54,11 @@ const Chat = () => {
         <div className="flex p-2">
           <div className="flex-1">
             <TextInput
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  sendMessage({ message: e.target.value });
+                }
+              }}
               {...register("message")}
               placeholder="Message"
               required
