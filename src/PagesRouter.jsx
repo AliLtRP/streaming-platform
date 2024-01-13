@@ -8,7 +8,6 @@ import {
 
 import LoginPage from "./pages/login";
 import Home from "./pages/home";
-import Video from "./pages/video";
 import Party from "./pages/party";
 
 const PagesRouter = () => {
@@ -19,9 +18,10 @@ const PagesRouter = () => {
       <Router>
         <Routes>
           <Route path="/videos" element={<Home />} />
-          <Route path="/videos/:video_id" element={<Video />} />
+
           <Route path="/" element={<Navigate replace to="/videos" />} />
-          <Route path="/login" element={<Navigate replace to="/videos" />} />
+          {/* <Route path="/login" element={<Navigate replace to="/videos" />} /> */}
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/party/:party_id" element={<Party />} />
         </Routes>
       </Router>

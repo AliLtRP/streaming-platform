@@ -32,12 +32,12 @@ function useHTTP() {
 
     try {
       const response = await client(options);
-      const res = response?.data;
-      setData(res?.result);
+
+      setData(response?.data);
       setLoading(false);
       setError(false);
 
-      return { data: res?.result, loading: false, error: false };
+      return { data: response?.data, loading: false, error: false };
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log("Request canceled", err.message);

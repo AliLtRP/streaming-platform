@@ -7,25 +7,37 @@ import {
   faChevronRight,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import io from "socket.io-client";
+
 const Chat = () => {
+  const socket = io("http://192.168.4.16:8000");
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm();
+
   const [showChat, setShowChat] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   const sendMessage = (data) => {
-    console.log(data);
+    socket.emit("message", data.message);
     setValue("message", "");
   };
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+  }, []);
 
   return (
     <>
       <div
-        className={`hidden flex-col absolute lg:flex right-0 top-0 min-w-[350px] w-[20vw] h-screen bg-gray-200 ${
+        className={`hidden flex-col fixed lg:flex lg:relative right-0 top-0 min-w-[350px] w-[20vw] h-screen bg-gray-200 ${
           showChat && "!flex"
         }`}
       >
@@ -33,25 +45,11 @@ const Chat = () => {
           <FontAwesomeIcon onClick={() => setShowChat(false)} icon={faXmark} />
         </div>
         <div className="flex-1 overflow-y-scroll">
-          <div className="w-fit p-3 bg-blue-300 m-5 rounded-lg">
-            <p> Message Message MessageMessage Message</p>
-          </div>
-          <div className="w-fit p-3 bg-blue-200 m-5 rounded-lg">
-            <p> Message</p>
-          </div>
-          <div className="w-fit p-3 bg-blue-200 m-5 rounded-lg">
-            <p> Message</p>
-          </div>
-          <div className="w-fit p-3 bg-blue-200 m-5 rounded-lg">
-            <p> Message</p>
-          </div>
-          <div className="w-fit p-3 bg-blue-200 m-5 rounded-lg">
-            <p> Message</p>
-          </div>
-
-          <div className="w-fit p-3 bg-blue-200 m-5 rounded-lg">
-            <p> Message</p>
-          </div>
+          {messages.map((message, index) => (
+            <div key={index} className="w-fit p-2 bg-blue-300 m-3 rounded-lg">
+              <p>{message}</p>
+            </div>
+          ))}
         </div>
         <div className="flex p-2">
           <div className="flex-1">

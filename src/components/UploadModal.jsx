@@ -2,7 +2,7 @@ import { Button, FileInput, Label, Modal, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import useHTTP from "../hooks/useHTTP";
 
-const UploadModal = ({ openModal, setOpenModal }) => {
+const UploadModal = ({ openModal, setOpenModal, refresh }) => {
   const {
     register,
     handleSubmit,
@@ -10,8 +10,23 @@ const UploadModal = ({ openModal, setOpenModal }) => {
   } = useForm();
   const [sendHTTP, response] = useHTTP();
 
-  const handleUpload = (data) => {
-    sendHTTP("/video", "POST", data, true);
+  const handleUpload = async (data) => {
+    console.log(data);
+    const res = await sendHTTP(
+      "/user/video/upload",
+      "POST",
+      {
+        title: data.title,
+        description: data.description,
+        video: data.video[0],
+      },
+      true
+    );
+
+    if (res.data) {
+      setOpenModal(false);
+      refresh();
+    }
   };
 
   return (
@@ -44,7 +59,7 @@ const UploadModal = ({ openModal, setOpenModal }) => {
               <div className="mb-2 block">
                 <Label htmlFor="file-upload" value="Upload file" />
               </div>
-              <FileInput {...register("video")} />
+              <FileInput accept="video/*" {...register("video")} />
             </div>
             <div className="w-full mt-4">
               <Button onClick={handleSubmit(handleUpload)}>Upload</Button>

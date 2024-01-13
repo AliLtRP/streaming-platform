@@ -5,10 +5,12 @@ import useAuthStore from "../../store/Auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [regiterationType, setRegiterationType] = useState("sign-in");
   const [sendHTTP] = useHTTP();
+  const navigate = useNavigate();
 
   const { setAuth } = useAuthStore();
 
@@ -46,21 +48,35 @@ const LoginPage = () => {
   useEffect(() => {
     console.log("🚀 errors", errors);
   }, [errors]);
-  const handleRegisteration = async (data) => {
-    console.log("🚀 handleRegisteration ~ data", {
-      ...data,
-      regiterationType,
-    });
 
-    const res = await sendHTTP("/user/register", "POST", {
-      ...data,
-      regiterationType,
-    });
+  const handleRegisteration = async (data) => {
+    let res = null;
+
+    if (regiterationType === "sign-up") {
+      res = await sendHTTP("/user/register", "POST", {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+    } else {
+      const isEmail = data["username-email"].includes("@");
+      res = await sendHTTP("/user/login", "POST", {
+        username: !isEmail ? data["username-email"] : null,
+        email: isEmail ? data["username-email"] : null,
+        password: data.password,
+      });
+    }
 
     console.log("🚀 handleRegisteration ~ res", res);
-
     if (res?.data) {
-      setAuth(res.data.user, res.data.token);
+      if (regiterationType === "sign-in") {
+        setAuth(res.data.user, res.data.token);
+        toast.success("Logged in successfully");
+        navigate("/videos");
+      } else {
+        setRegiterationType("sign-in");
+        toast.success("Account created successfully, please login");
+      }
     } else {
       console.log("ran");
       toast.error("Something went wrong");
@@ -76,7 +92,7 @@ const LoginPage = () => {
       <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-            Sign in to your account
+            Sign {regiterationType === "sign-in" ? "in" : "up"} to your account
           </h1>
           <form
             onSubmit={handleSubmit(handleRegisteration)}
