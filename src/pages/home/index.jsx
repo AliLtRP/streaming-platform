@@ -7,10 +7,12 @@ import useHTTP from "../../hooks/useHTTP";
 import { useNavigate } from "react-router-dom";
 import useVideosStore from "../../store/Videos";
 import DeleteModal from "../../components/DeleteModal";
+import useAuthStore from "../../store/Auth";
 
 const Home = () => {
   const [openModal, setOpenModal] = useState(false);
   const [sendHTTP, response] = useHTTP();
+  const { resetAuth } = useAuthStore();
   const navigate = useNavigate();
   const { setVideos } = useVideosStore();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -76,6 +78,13 @@ const Home = () => {
         className="fixed bottom-[5%]  right-[5%] p-1 rounded-xl text-white cursor-pointer active:scale-[98%] duration-150 capitalize"
       >
         upload video
+      </Button>
+
+      <Button
+        onClick={() => resetAuth()}
+        className="fixed left-[5%]  bottom-[5%] p-1 rounded-xl text-black bg-slate-300 hover:!bg-slate-400 cursor-pointer active:scale-[98%] duration-150 capitalize"
+      >
+        Sign out
       </Button>
 
       <UploadModal

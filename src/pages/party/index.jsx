@@ -11,13 +11,36 @@ const Party = () => {
   const activeVideo = getVideo(params.party_id);
   console.log("activeVideo", state);
   const copyToClipboard = async () => {
-    // try {
-    //   await navigator.clipboard.writeText(window.location.href);
-    //   toast.success("URL copied to clipboard");
-    //   console.log("URL copied to clipboard");
-    // } catch (err) {
-    //   console.error("Failed to copy URL: ", err);
-    // }
+    const url = window.location.href;
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(url);
+        toast.success("URL copied to clipboard");
+        console.log("URL copied to clipboard");
+      } catch (err) {
+        console.error("Failed to copy URL: ", err);
+      }
+    } else if (window.clipboardData) {
+      // Internet Explorer
+      window.clipboardData.setData("Text", url);
+      toast.success("URL copied to clipboard");
+      console.log("URL copied to clipboard");
+    } else {
+      // Fallback for other browsers
+      const textarea = document.createElement("textarea");
+      textarea.textContent = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        toast.success("URL copied to clipboard");
+        console.log("URL copied to clipboard");
+      } catch (err) {
+        console.error("Failed to copy URL: ", err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
   };
 
   return (

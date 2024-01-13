@@ -17,12 +17,32 @@ const PagesRouter = () => {
     <>
       <Router>
         <Routes>
-          <Route path="/videos" element={<Home />} />
+          {!user ? (
+            <>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/videos"
+                element={<Navigate replace to="/login" />}
+              />
+              <Route path="/*" element={<Navigate replace to="/login" />} />
+            </>
+          ) : (
+            <>
+              <Route path="/videos" element={<Home />} />
+              <Route path="/" element={<Navigate replace to="/videos" />} />
+              <Route path="/party/:party_id" element={<Party />} />
+              <Route
+                path="/login"
+                element={<Navigate replace to="/videos" />}
+              />
+            </>
+          )}
+          {/* <Route path="/videos" element={<Home />} />
 
           <Route path="/" element={<Navigate replace to="/videos" />} />
           {/* <Route path="/login" element={<Navigate replace to="/videos" />} /> */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/party/:party_id" element={<Party />} />
+          <Route path="/party/:party_id" element={<Party />} /> */}
         </Routes>
       </Router>
     </>
@@ -30,21 +50,3 @@ const PagesRouter = () => {
 };
 
 export default PagesRouter;
-
-// {!user ? (
-//   <>
-//     <Route path="/login" element={<LoginPage />} />
-//     <Route path="/videos" element={<Home />} /> {/* delete this */}
-//     <Route path="/*" element={<Navigate replace to="/login" />} />
-//   </>
-// ) : (
-//   <>
-//     <Route path="/videos" element={<Home />} />
-//     <Route path="/videos/:video_id" element={<Video />} />
-//     <Route path="/" element={<Navigate replace to="/videos" />} />
-//     <Route
-//       path="/login"
-//       element={<Navigate replace to="/videos" />}
-//     />
-//   </>
-// )}
