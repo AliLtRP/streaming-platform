@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import UploadModal from "../../components/UploadModal";
+import { useState } from "react";
 import { Button } from "flowbite-react";
 
 const Home = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <div className="flex">
       <div className="flex w-full justify-center mt-10 relative">
@@ -20,11 +23,15 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <button className="fixed bottom-[5%] right-[5%] bg-blue-500 p-3 rounded-xl text-white text-md cursor-pointer active:scale-[98%] duration-150 capitalize">
+
+      <Button
+        onClick={() => setOpenModal(true)}
+        className="fixed bottom-[5%]  right-[5%] p-1 rounded-xl text-white cursor-pointer active:scale-[98%] duration-150 capitalize"
+      >
         upload video
-      </button>
-      <Button>test</Button>
-      <UploadModal />
+      </Button>
+
+      <UploadModal openModal={openModal} setOpenModal={setOpenModal} />
     </div>
   );
 };

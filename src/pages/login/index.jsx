@@ -58,13 +58,15 @@ const LoginPage = () => {
     });
 
     console.log("🚀 handleRegisteration ~ res", res);
-    if (!res.error) {
+
+    if (res?.data) {
       setAuth(res.data.user, res.data.token);
     } else {
       console.log("ran");
       toast.error("Something went wrong");
     }
   };
+
   return (
     <div className="flex flex-col items-center md:justify-center h-screen px-6 py-8 mx-auto md:h-screen lg:py-0">
       <span className="flex items-center mb-6 text-4xl font-bold text-gray-900 ">
