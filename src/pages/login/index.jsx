@@ -17,24 +17,24 @@ const LoginPage = () => {
   const schema = yup.object().shape(
     regiterationType === "sign-up"
       ? {
-          email: yup.string().email().required(),
-          username: yup.string().min(3).max(20).required(),
-          password: yup
-            .string()
-            .min(8, "Password must be at least 8 characters")
-            .max(20, "Password must be at most 20 characters")
-            .required("Password is required"),
-        }
+        email: yup.string().email().required(),
+        username: yup.string().min(3).max(20).required(),
+        password: yup
+          .string()
+          .min(8, "Password must be at least 8 characters")
+          .max(20, "Password must be at most 20 characters")
+          .required("Password is required"),
+      }
       : {
-          "username-email": yup
-            .string()
-            .required("Email or username is required"),
-          password: yup
-            .string()
-            .min(8, "Password must be at least 8 characters")
-            .max(20, "Password must be at most 20 characters")
-            .required("Password is required"),
-        }
+        "username-email": yup
+          .string()
+          .required("Email or username is required"),
+        password: yup
+          .string()
+          .min(8, "Password must be at least 8 characters")
+          .max(20, "Password must be at most 20 characters")
+          .required("Password is required"),
+      }
   );
 
   const {
@@ -60,7 +60,7 @@ const LoginPage = () => {
       });
     } else {
       const isEmail = data["username-email"].includes("@");
-      res = await sendHTTP("/user/login", "POST", {
+      res = await sendHTTP("/auth/login", "POST", {
         username: !isEmail ? data["username-email"] : null,
         email: isEmail ? data["username-email"] : null,
         password: data.password,
@@ -70,7 +70,8 @@ const LoginPage = () => {
     console.log("🚀 handleRegisteration ~ res", res);
     if (res?.data) {
       if (regiterationType === "sign-in") {
-        setAuth(res.data.user, res.data.token);
+        console.log(res.data);
+        setAuth(res.data.access_token, res.data.refresh_token);
         toast.success("Logged in successfully");
         navigate("/videos");
       } else {

@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const Chat = () => {
-  const socket = io("http://192.168.4.16:8000");
+  const socket = io("http://localhost:8080");
 
   const {
     register,
@@ -37,9 +37,8 @@ const Chat = () => {
   return (
     <>
       <div
-        className={`hidden flex-col fixed lg:flex lg:relative right-0 top-0 min-w-[350px] w-[20vw] h-svh bg-gray-200 ${
-          showChat && "!flex"
-        }`}
+        className={`hidden flex-col fixed lg:flex lg:relative right-0 top-0 min-w-[350px] w-[20vw] h-svh bg-gray-200 ${showChat && "!flex"
+          }`}
       >
         <div className="px-4 py-2 text-2xl text-end cursor-pointer lg:hidden">
           <FontAwesomeIcon onClick={() => setShowChat(false)} icon={faXmark} />
@@ -72,9 +71,8 @@ const Chat = () => {
 
       <Button
         onClick={() => setShowChat(true)}
-        className={`absolute lg:hidden p-2 bottom-3 right-3 ${
-          showChat && "hidden"
-        }`}
+        className={`absolute lg:hidden p-2 bottom-3 right-3 ${showChat && "hidden"
+          }`}
       >
         <FontAwesomeIcon icon={faMessage} />
       </Button>
