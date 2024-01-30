@@ -13,7 +13,7 @@ const UploadModal = ({ openModal, setOpenModal, refresh }) => {
   const handleUpload = async (data) => {
     console.log(data);
     const res = await sendHTTP(
-      "/user/video/upload",
+      "/party-video/upload/video",
       "POST",
       {
         title: data.title,

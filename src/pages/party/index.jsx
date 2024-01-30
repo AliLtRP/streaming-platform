@@ -106,7 +106,7 @@ const Party = () => {
   }, [videoRef.current, socket]);
 
   useEffect(() => {
-    const syncThreshold = 1.5; // 1.5 seconds threshold
+    const syncThreshold = 0.5;
 
     socket.on("videoTime", (serverTime) => {
       if (videoRef.current) {
